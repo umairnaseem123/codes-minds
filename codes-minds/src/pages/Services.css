@@ -1,0 +1,105 @@
+.services-hero__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.services-hero h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin: 12px 0 18px;
+}
+
+.services-hero p {
+  color: var(--color-text-muted);
+  max-width: 520px;
+  margin-bottom: 24px;
+}
+
+.services-hero__badges {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.services-hero__badges span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.services-hero__badges svg {
+  color: var(--color-violet);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.services-why {
+  background: var(--color-surface);
+}
+
+.services-why__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.why-card {
+  text-align: center;
+  padding: 28px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  transition: all var(--transition);
+}
+
+.why-card:hover {
+  border-color: var(--color-violet);
+  transform: translateY(-4px);
+}
+
+.why-card h4 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.why-card p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 1024px) {
+  .services-hero__grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .services-hero p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .services-hero__badges {
+    justify-content: center;
+  }
+  .services-hero__visual {
+    order: -1;
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .services-why__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .services-grid,
+  .services-why__grid {
+    grid-template-columns: 1fr;
+  }
+}

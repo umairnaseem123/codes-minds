@@ -1,0 +1,178 @@
+.herovisual {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.herovisual__frame {
+  position: relative;
+  z-index: 2;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), var(--glow-violet);
+  transform: perspective(1000px) rotateY(-8deg) rotateX(2deg);
+  transition: transform 0.4s ease;
+}
+
+.herovisual:hover .herovisual__frame {
+  transform: perspective(1000px) rotateY(-4deg) rotateX(1deg);
+}
+
+.herovisual__topbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: var(--color-surface-alt);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.dot--red { background: #f87171; }
+.dot--yellow { background: #fbbf24; }
+.dot--green { background: #34d399; }
+
+.herovisual__urlbar {
+  flex: 1;
+  height: 16px;
+  margin-left: 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.herovisual__screen {
+  position: relative;
+  padding: 56px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.herovisual__glow {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.35), transparent 70%);
+  filter: blur(10px);
+  z-index: 0;
+}
+
+.herovisual__core {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-violet);
+  color: var(--color-violet);
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+  animation: float-core 5s ease-in-out infinite;
+}
+
+@keyframes float-core {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.herovisual__label {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--color-text);
+  max-width: 280px;
+  line-height: 1.4;
+}
+
+.herovisual__pill {
+  position: relative;
+  z-index: 1;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: var(--gradient-primary-diag);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.herovisual__base {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(139, 92, 246, 0.4), transparent 70%);
+  filter: blur(6px);
+  z-index: 1;
+}
+
+.herovisual__badge {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--badge-color, var(--color-violet));
+  box-shadow: 0 0 20px color-mix(in srgb, var(--badge-color, var(--color-violet)) 40%, transparent), 0 10px 24px rgba(0, 0, 0, 0.35);
+  animation: float-badge 4s ease-in-out infinite;
+}
+
+@keyframes float-badge {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.herovisual__badge--1 { top: 8%;   left: 2%;   animation-delay: 0s; }
+.herovisual__badge--2 { top: 2%;   right: 6%;  animation-delay: 0.4s; }
+.herovisual__badge--3 { top: 46%;  left: -6%;  animation-delay: 0.8s; }
+.herovisual__badge--4 { top: 40%;  right: -8%; animation-delay: 1.2s; }
+.herovisual__badge--5 { bottom: 8%; left: 6%;  animation-delay: 1.6s; }
+.herovisual__badge--6 { bottom: 2%; right: 2%; animation-delay: 2s; }
+
+@media (max-width: 968px) {
+  .herovisual {
+    max-width: 380px;
+    padding: 44px 24px;
+  }
+  .herovisual__frame {
+    transform: none;
+  }
+  .herovisual__screen {
+    padding: 40px 24px;
+  }
+  .herovisual__core {
+    width: 72px;
+    height: 72px;
+  }
+  .herovisual__badge {
+    width: 42px;
+    height: 42px;
+  }
+}

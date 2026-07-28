@@ -1,0 +1,231 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 20px 0;
+  background: rgba(8, 8, 15, 0.7);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: all var(--transition);
+}
+
+.header--scrolled {
+  padding: 14px 0;
+  background: rgba(8, 8, 15, 0.92);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.header__logo {
+  display: flex;
+  align-items: center;
+}
+
+.header__logo img {
+  height: 52px;
+  width: auto;
+}
+
+@media (max-width: 968px) {
+  .header__logo img {
+    height: 44px;
+  }
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.header__link {
+  position: relative;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+  transition: color var(--transition);
+}
+
+.header__link:hover {
+  color: var(--color-text);
+}
+
+.header__link.active {
+  color: var(--color-text);
+}
+
+.header__link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+}
+
+.header__link--dropdown svg {
+  transition: transform var(--transition);
+}
+
+.header__link--dropdown svg.rotate {
+  transform: rotate(180deg);
+}
+
+.header__dropdown {
+  position: relative;
+}
+
+.header__dropdown-menu {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  min-width: 240px;
+  box-shadow:
+    var(--glow-soft),
+    0 20px 40px rgba(0, 0, 0, 0.4);
+  display: grid;
+  gap: 2px;
+  animation: dropdownFade 0.2s ease;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.header__dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  transition: all var(--transition);
+}
+
+.header__dropdown-item:hover {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+}
+
+.header__dropdown-item svg {
+  color: var(--color-violet);
+  flex-shrink: 0;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.header__cta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header__cta-arrow {
+  transform: rotate(-90deg);
+}
+
+.header__toggle {
+  display: none;
+  color: var(--color-text);
+}
+
+/* Shared button styles used across the site */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background: var(--gradient-primary-diag);
+  color: #fff;
+  box-shadow: var(--glow-violet);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+}
+
+.btn--outline {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn--outline:hover {
+  border-color: var(--color-violet);
+  background: var(--color-surface);
+}
+
+@media (max-width: 968px) {
+  .header__nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: min(320px, 80vw);
+    background: var(--color-surface);
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 100px 32px 32px;
+    gap: 24px;
+    transition: right 0.3s ease;
+    border-left: 1px solid var(--color-border);
+  }
+
+  .header__nav--open {
+    right: 0;
+  }
+
+  .header__dropdown-menu {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    margin-top: 8px;
+    width: 100%;
+  }
+
+  .header__cta {
+    display: none;
+  }
+
+  .header__toggle {
+    display: block;
+  }
+}

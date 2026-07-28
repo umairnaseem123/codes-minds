@@ -1,0 +1,98 @@
+.servicecard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px 24px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: all var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.servicecard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--transition);
+  z-index: 0;
+}
+
+.servicecard:hover {
+  transform: translateY(-6px);
+  border-color: var(--card-color, var(--color-violet));
+}
+
+.servicecard:hover::before {
+  opacity: 0.06;
+  background: var(--card-color, var(--color-violet));
+}
+
+.servicecard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.servicecard__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  background: var(--card-color, var(--color-violet));
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.servicecard h3 {
+  font-size: 1.15rem;
+}
+
+.servicecard p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  flex: 1;
+}
+
+.servicecard__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--card-color, var(--color-violet));
+  transition: gap var(--transition);
+}
+
+.servicecard:hover .servicecard__link {
+  gap: 10px;
+}
+
+/* Color variants — maps to service.color from data/services.jsx */
+.servicecard--violet {
+  --card-color: var(--color-violet);
+}
+.servicecard--blue {
+  --card-color: var(--color-blue);
+}
+.servicecard--teal {
+  --card-color: #2dd4bf;
+}
+.servicecard--pink {
+  --card-color: #ec4899;
+}
+.servicecard--orange {
+  --card-color: #f97316;
+}
+.servicecard--gold {
+  --card-color: #eab308;
+}
+.servicecard--green {
+  --card-color: #22c55e;
+}
+.servicecard--skyblue {
+  --card-color: #0ea5e9;
+}
