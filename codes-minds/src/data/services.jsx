@@ -8,8 +8,23 @@ import {
   TrendingUp,
   ShieldCheck,
 } from "lucide-react";
+import { getIcon } from "./iconMap";
 
-export const services = [
+// Backend serves uploaded images at a relative path (e.g. /uploads/xyz.png).
+// We need to prefix it with the API's base URL so the browser can load it.
+const API_BASE = import.meta.env.VITE_API_URL || "";
+
+function resolveImage(path) {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  return `${API_BASE}${path}`;
+}
+
+// Rich marketing copy (hero lines, offerings, stats, tools, process) that isn't
+// stored in the backend — matched to live data from the API by slug. Basic
+// fields (title, description, image, order, icon) come from the admin panel;
+// see mergeServiceContent() below.
+export const staticServices = [
   {
     id: 1,
     slug: "web-development",
@@ -509,7 +524,7 @@ export const services = [
   },
   {
     id: 6,
-    slug: "ecommerce-solutions",
+    slug: "e-commerce-solutions",
     heroImage: "/services/ecommerce-solutions.jpg",
     icon: ShoppingCart,
     color: "gold",
@@ -844,4 +859,55 @@ export const services = [
   },
 ];
 
-export const getServiceBySlug = (slug) => services.find((s) => s.slug === slug);
+// Combines live API service data with the static rich content above, matched
+// by slug. Falls back to the static list untouched if the API has nothing yet
+// (e.g. backend unreachable) so the site still renders.
+export function mergeServiceContent(apiServices) {
+  if (!apiServices || apiServices.length === 0) return staticServices;
+
+  const bySlug = new Map(staticServices.map((s) => [s.slug, s]));
+
+  const merged = apiServices.map((api) => {
+    const base = bySlug.get(api.slug);
+    const icon = getIcon(api.icon);
+    const resolvedImage = resolveImage(api.image);
+
+    if (base) {
+      return {
+        ...base,
+        id: api._id,
+        title: api.title,
+        shortDesc: api.description,
+        icon,
+        image: resolvedImage,
+        heroImage: resolvedImage || base.heroImage,
+        order: api.order ?? base.order,
+      };
+    }
+
+    // A service added purely through the admin panel with no static rich
+    // content yet — render it with sensible, minimal defaults.
+    return {
+      id: api._id,
+      slug: api.slug,
+      title: api.title,
+      shortDesc: api.description,
+      icon,
+      color: "violet",
+      heroImage: resolvedImage || "",
+      heroLines: [api.title],
+      heroHighlight: api.title,
+      heroDesc: api.description,
+      heroFeatures: [],
+      stats: [],
+      offerings: [],
+      process: [],
+      tools: [],
+      order: api.order ?? 0,
+    };
+  });
+
+  return merged.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+}
+
+export const getServiceBySlug = (list, slug) => list.find((s) => s.slug === slug);

@@ -177,7 +177,7 @@ function About() {
               that make a real difference.
             </p>
           </div>
-          <Team variant="duo" />
+          <Team />
         </div>
       </section>
 

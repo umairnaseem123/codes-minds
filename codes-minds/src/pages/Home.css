@@ -284,7 +284,7 @@
   max-width: 520px;
   height: auto;
   max-height: 560px;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
   filter: drop-shadow(0 0 50px rgba(139, 92, 246, 0.4));
 }

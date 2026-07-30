@@ -1,17 +1,47 @@
+import { useEffect, useState } from "react";
 import { Link, useParams, Navigate } from "react-router-dom";
 import { ArrowRight, CheckCircle2, ChevronRight } from "lucide-react";
 import HeroVisual from "../components/HeroVisual";
 import StatBar from "../components/StatBar";
 import ProcessSteps from "../components/ProcessSteps";
 import CTABanner from "../components/CTABanner";
-import { services, getServiceBySlug } from "../data/services";
+import { useServices } from "../hooks/useServices";
+import { getServiceBySlug } from "../data/services";
+import { getPortfolio } from "../api/portfolio";
+import { resolveImage } from "../api/config";
 import "./ServiceDetail.css";
 
 function ServiceDetail() {
   const { slug } = useParams();
-  const service = getServiceBySlug(slug);
+  const { services, loading } = useServices();
+  const service = getServiceBySlug(services, slug);
+
+  const [projects, setProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(true);
+
+  // Fetch only the portfolio projects tagged to this specific service's id,
+  // so each service page shows just its own completed work.
+  useEffect(() => {
+    if (!service?.id) return;
+    let cancelled = false;
+    setProjectsLoading(true);
+    getPortfolio(service.id)
+      .then((res) => {
+        if (!cancelled) setProjects(res.data || []);
+      })
+      .catch(() => {
+        if (!cancelled) setProjects([]);
+      })
+      .finally(() => {
+        if (!cancelled) setProjectsLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [service?.id]);
 
   if (!service) {
+    if (loading) return null;
     return <Navigate to="/services" replace />;
   }
 
@@ -121,6 +151,60 @@ function ServiceDetail() {
           </div>
         </div>
       </section>
+
+      {!projectsLoading && projects.length > 0 && (
+        <section className="section service-detail-work">
+          <div className="container">
+            <div className="section-header">
+              <span className="eyebrow">OUR WORK</span>
+              <h2>
+                Real <span className="gradient-text">{service.title} Projects</span>
+              </h2>
+              <p>{`A few ${service.title} projects we've delivered for clients.`}</p>
+            </div>
+
+            <div className="service-detail-work__grid">
+              {projects.map((project) => (
+                <div key={project._id} className="work-card">
+                  <div className="work-card__image">
+                    {project.images && project.images.length > 0 ? (
+                      <img
+                        src={resolveImage(project.images[0])}
+                        alt={project.title}
+                      />
+                    ) : (
+                      <div className="work-card__image--placeholder" />
+                    )}
+                    {project.images && project.images.length > 1 && (
+                      <span className="work-card__count">
+                        +{project.images.length - 1}
+                      </span>
+                    )}
+                  </div>
+                  <div className="work-card__body">
+                    <h4>{project.title}</h4>
+                    <p>{project.description}</p>
+                    {project.client && (
+                      <span className="work-card__client">{project.client}</span>
+                    )}
+                    {project.link && (
+                      
+                        <a                      
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="work-card__link"
+                      >
+                        Visit Project <ArrowRight size={14} />
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <section className="section service-detail-process">
         <ProcessSteps

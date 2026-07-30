@@ -3,7 +3,7 @@ import ServiceCard from '../components/ServiceCard';
 import ProcessSteps from '../components/ProcessSteps';
 import CTABanner from '../components/CTABanner';
 import HeroVisual from '../components/HeroVisual';
-import { services } from '../data/services';
+import { useServices } from '../hooks/useServices';
 import './Services.css';
 
 const whyChooseUs = [
@@ -25,6 +25,8 @@ const process = [
 ];
 
 function Services() {
+  const { services } = useServices();
+
   return (
     <>
       <section className="section services-hero">

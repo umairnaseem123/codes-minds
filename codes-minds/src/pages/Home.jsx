@@ -3,8 +3,9 @@ import { ArrowRight, Star } from "lucide-react";
 import StatBar from "../components/StatBar";
 import ServiceCard from "../components/ServiceCard";
 import CTABanner from "../components/CTABanner";
-import { services } from "../data/services";
-import { portfolioProjects } from "../data/portfolio";
+import { useServices } from "../hooks/useServices";
+import { usePortfolio } from "../hooks/usePortfolio";
+import { resolveImage } from "../api/config";
 import "./Home.css";
 
 const homeStats = [
@@ -37,6 +38,9 @@ const testimonials = [
 ];
 
 function Home() {
+  const { services } = useServices();
+  const { projects } = usePortfolio();
+
   return (
     <>
       <section className="home-hero section">
@@ -128,16 +132,19 @@ function Home() {
           </div>
 
           <div className="home-projects__grid">
-            {portfolioProjects.slice(0, 3).map((project, i) => (
-              <div key={i} className="home-project-card">
+            {projects.slice(0, 3).map((project) => (
+              <div key={project._id} className="home-project-card">
                 <div className="home-project-card__image">
-                  <img src={project.image} alt={project.name} />
+                  <img
+                    src={resolveImage(project.images?.[0])}
+                    alt={project.title}
+                  />
                 </div>
                 <div className="home-project-card__body">
                   <span className="home-project-card__tag">
-                    {project.category}
+                    {project.service?.title}
                   </span>
-                  <h4>{project.name}</h4>
+                  <h4>{project.title}</h4>
                 </div>
               </div>
             ))}

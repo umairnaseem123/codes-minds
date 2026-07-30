@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { services } from "../data/services";
+import { useServices } from "../hooks/useServices";
 import logo from "../assets/logo.png";
 import "./Header.css";
 
 function Header() {
+  const { services } = useServices();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);

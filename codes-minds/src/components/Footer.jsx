@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 import { Phone, Mail, MapPin, Send } from "lucide-react";
-import { services } from "../data/services";
+import { useServices } from "../hooks/useServices";
 import logo from "../assets/logo.png";
 import "./Footer.css";
 
 function Footer() {
+  const { services } = useServices();
   const year = new Date().getFullYear();
 
   return (

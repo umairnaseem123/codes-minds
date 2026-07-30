@@ -1,5 +1,5 @@
-import emailjs from "@emailjs/browser";
 import { useState } from "react";
+import { submitContact } from "../api/contact";
 import {
   Phone,
   Mail,
@@ -82,27 +82,15 @@ function Contact() {
     setSending(true);
     setError("");
 
-    emailjs
-      .send(
-        "service_vgzpxzw",
-        "template_f3ptv58",
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message,
-        },
-        "wCPlHEI7FjiduEoZS",
-      )
+    submitContact(formData)
       .then(() => {
         setSubmitted(true);
         setSending(false);
       })
       .catch((err) => {
-        console.error("EmailJS error:", err);
+        console.error("Contact submit error:", err);
         setError(
-          "Something went wrong. Please try again or email us directly.",
+          err.message || "Something went wrong. Please try again or email us directly.",
         );
         setSending(false);
       });

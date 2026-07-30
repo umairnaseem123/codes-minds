@@ -136,3 +136,127 @@
     grid-template-columns: 1fr;
   }
 }
+/* --- Video hover + Modal additions --- */
+
+.portfolio-card {
+  cursor: pointer;
+}
+
+.portfolio-card__image {
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-card__video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.portfolio-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.portfolio-modal {
+  background: var(--color-surface, #14141c);
+  border-radius: 16px;
+  max-width: 760px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.portfolio-modal__close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.portfolio-modal__media {
+  width: 100%;
+  max-height: 420px;
+  overflow: hidden;
+  border-radius: 16px 16px 0 0;
+  background: #000;
+}
+
+.portfolio-modal__img,
+.portfolio-modal__video {
+  width: 100%;
+  max-height: 420px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.portfolio-modal__body {
+  padding: 24px;
+}
+
+.portfolio-modal__client {
+  margin-top: 12px;
+  color: var(--color-text-muted);
+}
+
+.portfolio-modal__link {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: var(--color-primary, #6c5ce7);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+}
+/* --- Equal height cards --- */
+
+.portfolio-grid {
+  align-items: stretch;
+}
+
+.portfolio-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.portfolio-card__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.portfolio-card__body h3 {
+  min-height: 2.6em;
+}
+
+.portfolio-card__body p {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
