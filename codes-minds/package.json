@@ -11,7 +11,9 @@
     "vercel-build": "vite build"
   },
   "dependencies": {
+    "cloudinary": "^2.10.0",
     "lucide-react": "^1.27.0",
+    "multer-storage-cloudinary": "^4.0.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-icons": "^5.7.0",
