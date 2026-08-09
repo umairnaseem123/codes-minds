@@ -124,7 +124,7 @@ function AdminPortfolio() {
       <div className="admin-header">
         <div>
           <h1>Portfolio</h1>
-          <p>Manage your project gallery  images and videos, linked to a service.</p>
+          <p>Manage your project gallery — images and videos, linked to a service.</p>
         </div>
         <button className="admin-add-btn" onClick={openCreate}>
           <Plus size={16} /> Add Project

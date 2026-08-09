@@ -12,7 +12,7 @@ import { getIcon } from "./iconMap";
 import { resolveImage } from "../api/config";
 
 // Rich marketing copy (hero lines, offerings, stats, tools, process) that isn't
-// stored in the backend  matched to live data from the API by slug. Basic
+// stored in the backend — matched to live data from the API by slug. Basic
 // fields (title, description, image, order, icon) come from the admin panel;
 // see mergeServiceContent() below.
 export const staticServices = [
@@ -753,7 +753,7 @@ export const staticServices = [
     heroLines: ["We Keep Your Website", "Secure, Updated &", "Always Running."],
     heroHighlight: "Secure, Updated &",
     heroDesc:
-      "We provide reliable website maintenance services to keep your website secure, up-to-date, fast and error-free  so you can focus on growing your business.",
+      "We provide reliable website maintenance services to keep your website secure, up-to-date, fast and error-free — so you can focus on growing your business.",
     heroFeatures: [
       "Regular Updates & Backups",
       "Top-notch Security Monitoring",
@@ -877,7 +877,7 @@ export function mergeServiceContent(apiServices) {
     }
 
     // A service added purely through the admin panel with no static rich
-    // content yet  render it with sensible, minimal defaults.
+    // content yet — render it with sensible, minimal defaults.
     return {
       id: api._id,
       slug: api.slug,
