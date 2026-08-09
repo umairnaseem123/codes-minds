@@ -19,7 +19,18 @@ const removeUploadedFiles = (paths) => {
 export const getPortfolio = async (req, res) => {
   try {
     const filter = {};
-    if (req.query.service) filter.service = req.query.service;
+
+    if (req.query.service) {
+      if (mongoose.Types.ObjectId.isValid(req.query.service)) {
+        filter.service = req.query.service;
+      } else {
+        const serviceDoc = await Service.findOne({ slug: req.query.service });
+        if (!serviceDoc) {
+          return res.json({ success: true, count: 0, data: [] });
+        }
+        filter.service = serviceDoc._id;
+      }
+    }
 
     const projects = await Portfolio.find(filter)
       .populate("service", "title slug")
@@ -137,7 +148,7 @@ export const updatePortfolio = async (req, res) => {
     if (req.files?.images && req.files.images.length > 0) {
       removeUploadedFiles(project.images);
       project.images = req.files.images.map(
-        (file) => `/uploads/${file.filename}`
+        (file) => `/uploads/${file.filename}`,
       );
     }
 
