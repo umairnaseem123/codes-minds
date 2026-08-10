@@ -86,13 +86,10 @@ export const createPortfolio = async (req, res) => {
     }
 
     const images = req.files?.images
-      ? req.files.images.map((file) => `/uploads/${file.filename}`)
+      ? req.files.images.map((file) => file.path)
       : [];
 
-    const video = req.files?.video?.[0]
-      ? `/uploads/${req.files.video[0].filename}`
-      : "";
-
+    const video = req.files?.video?.[0] ? req.files.video[0].path : "";
     const project = await Portfolio.create({
       title,
       description,

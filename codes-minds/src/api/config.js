@@ -1,5 +1,6 @@
 // Base URL of the backend server (no trailing slash), e.g. http://localhost:5000
-export const SERVER_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+export const SERVER_URL =
+  import.meta.env.VITE_API_URL || "https://codes-minds-jc3v-sepia.vercel.app";
 
 // Base URL for API calls
 export const API_URL = `${SERVER_URL}/api`;
