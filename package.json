@@ -1,4 +1,12 @@
 {
+  "name": "codes-minds-fullstack",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix codes-minds run dev",
+    "build": "npm install --prefix codes-minds && npm run build --prefix codes-minds",
+    "lint": "npm run lint --prefix codes-minds",
+    "vercel-build": "npm install --prefix codes-minds && npm run build --prefix codes-minds"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
@@ -10,14 +18,6 @@
     "multer": "^2.2.0",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^9.0.5"
-  },
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "oxlint",
-    "preview": "vite preview",
-    "vercel-build": "vite build",
-    "start": "cd backend && npm install && node server.js"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^6.0.5",
