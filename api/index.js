@@ -1,37 +1,25 @@
-﻿import connectDB from "../backend/src/config/db.js";
-import app from "../backend/src/app.js";
-
-let cachedDb = null;
-
-async function connectToDatabase() {
-  if (cachedDb) {
-    return cachedDb;
-  }
-
-  const conn = await connectDB();
-  cachedDb = conn;
-
-  return conn;
-}
-
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
-  );
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
+﻿export default async function handler(req, res) {
   try {
-    await connectToDatabase();
+    const { default: connectDB } = await import("../backend/src/config/db.js");
+    const { default: app } = await import("../backend/src/app.js");
+
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,OPTIONS,PATCH,DELETE,POST,PUT",
+    );
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
+    );
+
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
+
+    await connectDB();
+
     return app(req, res);
   } catch (error) {
     console.error("API Error:", error);
