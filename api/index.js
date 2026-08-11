@@ -1,5 +1,5 @@
-﻿import connectDB from "../backend/src/config/db.js";
-import app from "../backend/src/app.js";
+﻿import app from "../backend/src/app.js";
+import connectDB from "../backend/src/config/db.js";
 
 let cachedDb = null;
 
@@ -27,10 +27,17 @@ export default async function handler(req, res) {
     "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization",
   );
 
-  // Preflight
+  // CORS preflight
   if (req.method === "OPTIONS") {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
+  }
+
+  // Health check does NOT need MongoDB
+  if (req.url?.startsWith("/api/health")) {
+    return res.status(200).json({
+      status: "ok",
+      message: "Codes Minds API is running",
+    });
   }
 
   try {
