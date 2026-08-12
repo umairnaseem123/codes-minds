@@ -33,16 +33,24 @@ function AdminPortfolio() {
 
   const load = () => {
     setLoading(true);
+
     Promise.all([getPortfolio(), getServices()])
       .then(([portfolioRes, servicesRes]) => {
-        setProjects(portfolioRes.data?.data || portfolioRes.data || []);
-        setServices(servicesRes.data?.data || servicesRes.data || []);
+        setProjects(portfolioRes.data || []);
+        setServices(servicesRes.data || []);
       })
-      .catch(() => {})
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        console.error("Failed to load admin data:", err);
+        setError("Failed to load portfolio data");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  useEffect(load, []);
+  useEffect(() => {
+    load();
+  }, []);
 
   const openCreate = () => {
     setEditing(null);
@@ -55,6 +63,7 @@ function AdminPortfolio() {
 
   const openEdit = (project) => {
     setEditing(project);
+
     setForm({
       title: project.title || "",
       description: project.description || "",
@@ -63,34 +72,63 @@ function AdminPortfolio() {
       link: project.link || "",
       order: project.order ?? 0,
     });
+
     setImageFiles([]);
     setVideoFile(null);
     setError("");
     setModalOpen(true);
   };
 
-  const closeModal = () => setModalOpen(false);
+  const closeModal = () => {
+    if (saving) return;
+
+    setModalOpen(false);
+    setEditing(null);
+    setImageFiles([]);
+    setVideoFile(null);
+    setError("");
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setSaving(true);
     setError("");
 
-    if (!form.title || !form.description || !form.service) {
-      setError("Title, description aur service zaroori hain");
+    if (!form.title.trim()) {
+      setError("Project title is required");
+      setSaving(false);
+      return;
+    }
+
+    if (!form.description.trim()) {
+      setError("Project description is required");
+      setSaving(false);
+      return;
+    }
+
+    if (!form.service) {
+      setError("Please select a service");
       setSaving(false);
       return;
     }
 
     const fd = new FormData();
-    fd.append("title", form.title);
-    fd.append("description", form.description);
+
+    fd.append("title", form.title.trim());
+    fd.append("description", form.description.trim());
     fd.append("service", form.service);
-    fd.append("client", form.client);
-    fd.append("link", form.link);
-    fd.append("order", form.order);
-    imageFiles.forEach((file) => fd.append("images", file));
-    if (videoFile) fd.append("video", videoFile);
+    fd.append("client", form.client.trim());
+    fd.append("link", form.link.trim());
+    fd.append("order", String(Number(form.order) || 0));
+
+    imageFiles.forEach((file) => {
+      fd.append("images", file);
+    });
+
+    if (videoFile) {
+      fd.append("video", videoFile);
+    }
 
     try {
       if (editing) {
@@ -98,11 +136,16 @@ function AdminPortfolio() {
       } else {
         await createPortfolio(fd);
       }
-      setModalOpen(false);
+
+      closeModal();
       load();
     } catch (err) {
+      console.error("Portfolio save error:", err);
+
       setError(
-        err?.response?.data?.message || err.message || "Failed to save project"
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to save project"
       );
     } finally {
       setSaving(false);
@@ -110,12 +153,23 @@ function AdminPortfolio() {
   };
 
   const handleDelete = async (project) => {
-    if (!window.confirm(`Delete "${project.title}"?`)) return;
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${project.title}"?`
+    );
+
+    if (!confirmed) return;
+
     try {
       await deletePortfolio(project._id);
       load();
     } catch (err) {
-      alert(err?.response?.data?.message || err.message || "Failed to delete");
+      console.error("Delete error:", err);
+
+      alert(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to delete project"
+      );
     }
   };
 
@@ -124,10 +178,14 @@ function AdminPortfolio() {
       <div className="admin-header">
         <div>
           <h1>Portfolio</h1>
-          <p>Manage your project gallery  images and videos, linked to a service.</p>
+          <p>
+            Manage your projects, images and videos linked to your services.
+          </p>
         </div>
+
         <button className="admin-add-btn" onClick={openCreate}>
-          <Plus size={16} /> Add Project
+          <Plus size={16} />
+          Add Project
         </button>
       </div>
 
@@ -145,35 +203,47 @@ function AdminPortfolio() {
                 <th>Service</th>
                 <th>Client</th>
                 <th>Order</th>
-                <th></th>
+                <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
-              {projects.map((p) => (
-                <tr key={p._id}>
+              {projects.map((project) => (
+                <tr key={project._id}>
                   <td>
-                    {p.images?.[0] ? (
+                    {project.images?.[0] ? (
                       <img
                         className="admin-table__thumb"
-                        src={resolveImage(p.images[0])}
-                        alt={p.title}
+                        src={resolveImage(project.images[0])}
+                        alt={project.title}
                       />
                     ) : (
                       <div className="admin-table__thumb" />
                     )}
                   </td>
-                  <td>{p.title}</td>
-                  <td>{p.service?.title || "-"}</td>
-                  <td>{p.client || "-"}</td>
-                  <td>{p.order}</td>
+
+                  <td>{project.title}</td>
+
+                  <td>{project.service?.title || "-"}</td>
+
+                  <td>{project.client || "-"}</td>
+
+                  <td>{project.order}</td>
+
                   <td>
                     <div className="admin-table__actions">
-                      <button className="admin-icon-btn" onClick={() => openEdit(p)}>
+                      <button
+                        className="admin-icon-btn"
+                        onClick={() => openEdit(project)}
+                        title="Edit Project"
+                      >
                         <Pencil size={15} />
                       </button>
+
                       <button
                         className="admin-icon-btn admin-icon-btn--danger"
-                        onClick={() => handleDelete(p)}
+                        onClick={() => handleDelete(project)}
+                        title="Delete Project"
                       >
                         <Trash2 size={15} />
                       </button>
@@ -188,10 +258,18 @@ function AdminPortfolio() {
 
       {modalOpen && (
         <div className="admin-modal-overlay" onClick={closeModal}>
-          <div className="admin-modal" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="admin-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="admin-modal__header">
               <h3>{editing ? "Edit Project" : "Add Project"}</h3>
-              <button className="admin-modal__close" onClick={closeModal}>
+
+              <button
+                className="admin-modal__close"
+                onClick={closeModal}
+                disabled={saving}
+              >
                 <X size={20} />
               </button>
             </div>
@@ -199,121 +277,211 @@ function AdminPortfolio() {
             <form className="admin-form" onSubmit={handleSubmit}>
               <div>
                 <label>Title</label>
+
                 <input
                   type="text"
                   value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      title: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
+
               <div>
                 <label>Description</label>
+
                 <textarea
                   value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      description: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
+
               <div className="admin-form__row">
                 <div>
                   <label>Service</label>
+
                   <select
                     value={form.service}
-                    onChange={(e) => setForm({ ...form, service: e.target.value })}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        service: e.target.value,
+                      })
+                    }
                     required
                   >
                     <option value="">Select service</option>
-                    {services.map((s) => (
-                      <option key={s._id} value={s._id}>
-                        {s.title}
+
+                    {services.map((service) => (
+                      <option
+                        key={service._id}
+                        value={service._id}
+                      >
+                        {service.title}
                       </option>
                     ))}
                   </select>
                 </div>
+
                 <div>
                   <label>Order</label>
+
                   <input
                     type="number"
                     value={form.order}
-                    onChange={(e) => setForm({ ...form, order: e.target.value })}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        order: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
+
               <div className="admin-form__row">
                 <div>
                   <label>Client (optional)</label>
+
                   <input
                     type="text"
                     value={form.client}
-                    onChange={(e) => setForm({ ...form, client: e.target.value })}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        client: e.target.value,
+                      })
+                    }
                   />
                 </div>
+
                 <div>
                   <label>Link (optional)</label>
+
                   <input
                     type="text"
                     value={form.link}
-                    onChange={(e) => setForm({ ...form, link: e.target.value })}
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        link: e.target.value,
+                      })
+                    }
                   />
                 </div>
               </div>
 
               <div>
                 <label>Images</label>
+
                 <input
                   type="file"
                   accept="image/*"
                   multiple
-                  onChange={(e) => setImageFiles(Array.from(e.target.files))}
+                  onChange={(e) =>
+                    setImageFiles(Array.from(e.target.files || []))
+                  }
                 />
+
                 {editing && (
                   <p className="admin-form__hint">
-                    Naya select karoge to purani saari images replace ho jayengi.
+                    Select new images only if you want to replace the
+                    existing images.
                   </p>
                 )}
-                {editing?.images?.length > 0 && imageFiles.length === 0 && (
-                  <div className="admin-form__preview-row">
-                    {editing.images.map((img, i) => (
-                      <img
-                        key={i}
-                        className="admin-form__preview"
-                        src={resolveImage(img)}
-                        alt=""
-                      />
-                    ))}
-                  </div>
+
+                {imageFiles.length > 0 && (
+                  <p className="admin-form__hint">
+                    {imageFiles.length} new image
+                    {imageFiles.length > 1 ? "s" : ""} selected.
+                  </p>
                 )}
+
+                {editing?.images?.length > 0 &&
+                  imageFiles.length === 0 && (
+                    <div className="admin-form__preview-row">
+                      {editing.images.map((img, index) => (
+                        <img
+                          key={index}
+                          className="admin-form__preview"
+                          src={resolveImage(img)}
+                          alt={`Project ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
               </div>
 
               <div>
                 <label>Video (optional)</label>
+
                 <input
                   type="file"
-                  accept="video/*"
-                  onChange={(e) => setVideoFile(e.target.files[0])}
+                  accept="video/mp4,video/webm,video/quicktime"
+                  onChange={(e) =>
+                    setVideoFile(e.target.files?.[0] || null)
+                  }
                 />
+
                 {editing && (
                   <p className="admin-form__hint">
-                    Naya select karoge to purani video replace ho jayegi.
+                    Select a new video only if you want to replace the
+                    existing video.
                   </p>
                 )}
+
+                {videoFile && (
+                  <p className="admin-form__hint">
+                    New video selected: {videoFile.name}
+                  </p>
+                )}
+
                 {editing?.video && !videoFile && (
                   <video
                     className="admin-form__preview"
                     src={resolveImage(editing.video)}
                     controls
+                    preload="metadata"
                   />
                 )}
               </div>
 
-              {error && <p className="admin-form__error">{error}</p>}
+              {error && (
+                <p className="admin-form__error">
+                  {error}
+                </p>
+              )}
 
               <div className="admin-form__actions">
-                <button type="button" className="admin-btn-secondary" onClick={closeModal}>
+                <button
+                  type="button"
+                  className="admin-btn-secondary"
+                  onClick={closeModal}
+                  disabled={saving}
+                >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn--primary" disabled={saving}>
-                  {saving ? "Saving..." : "Save"}
+
+                <button
+                  type="submit"
+                  className="btn btn--primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editing
+                    ? "Update Project"
+                    : "Save Project"}
                 </button>
               </div>
             </form>

@@ -2,8 +2,10 @@ import mongoose from "mongoose";
 import Portfolio from "../models/Portfolio.js";
 import Service from "../models/Service.js";
 
-// @route GET /api/portfolio
-// @access Public
+// ==========================================
+// GET ALL PORTFOLIO PROJECTS
+// ==========================================
+
 export const getPortfolio = async (req, res) => {
   try {
     const filter = {};
@@ -30,7 +32,10 @@ export const getPortfolio = async (req, res) => {
 
     const projects = await Portfolio.find(filter)
       .populate("service", "title slug")
-      .sort({ order: 1, createdAt: -1 });
+      .sort({
+        order: 1,
+        createdAt: -1,
+      });
 
     res.json({
       success: true,
@@ -45,14 +50,15 @@ export const getPortfolio = async (req, res) => {
   }
 };
 
-// @route GET /api/portfolio/:id
-// @access Public
+// ==========================================
+// GET SINGLE PORTFOLIO PROJECT
+// ==========================================
+
 export const getPortfolioById = async (req, res) => {
   try {
-    const project = await Portfolio.findById(req.params.id).populate(
-      "service",
-      "title slug",
-    );
+    const project = await Portfolio.findById(
+      req.params.id
+    ).populate("service", "title slug");
 
     if (!project) {
       return res.status(404).json({
@@ -73,19 +79,27 @@ export const getPortfolioById = async (req, res) => {
   }
 };
 
-// @route POST /api/portfolio
-// Files:
-// images = multiple images
-// video = single video
-// @access Private (admin)
+// ==========================================
+// CREATE PORTFOLIO PROJECT
+// ==========================================
+
 export const createPortfolio = async (req, res) => {
   try {
-    const { title, description, service, client, link, order } = req.body;
+    const {
+      title,
+      description,
+      service,
+      client,
+      link,
+      order,
+      videoUrl,
+    } = req.body;
 
     if (!title || !description || !service) {
       return res.status(400).json({
         success: false,
-        message: "Title, description and service are required",
+        message:
+          "Title, description and service are required",
       });
     }
 
@@ -101,16 +115,33 @@ export const createPortfolio = async (req, res) => {
     if (!serviceExists) {
       return res.status(404).json({
         success: false,
-        message: "Selected service does not exist",
+        message:
+          "Selected service does not exist",
       });
     }
 
-    // Cloudinary URLs
+    // ==========================================
+    // IMAGES FROM BACKEND / CLOUDINARY
+    // ==========================================
+
     const images = req.files?.images
       ? req.files.images.map((file) => file.path)
       : [];
 
-    const video = req.files?.video?.[0] ? req.files.video[0].path : "";
+    // ==========================================
+    // VIDEO
+    // Priority:
+    // 1. Direct Cloudinary URL from frontend
+    // 2. Traditional backend uploaded video
+    // ==========================================
+
+    let video = "";
+
+    if (videoUrl) {
+      video = videoUrl;
+    } else if (req.files?.video?.[0]) {
+      video = req.files.video[0].path;
+    }
 
     const project = await Portfolio.create({
       title,
@@ -123,13 +154,18 @@ export const createPortfolio = async (req, res) => {
       video,
     });
 
-    const populated = await project.populate("service", "title slug");
+    const populated = await project.populate(
+      "service",
+      "title slug"
+    );
 
     res.status(201).json({
       success: true,
       data: populated,
     });
   } catch (error) {
+    console.error("CREATE PORTFOLIO ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -137,11 +173,15 @@ export const createPortfolio = async (req, res) => {
   }
 };
 
-// @route PUT /api/portfolio/:id
-// @access Private (admin)
+// ==========================================
+// UPDATE PORTFOLIO PROJECT
+// ==========================================
+
 export const updatePortfolio = async (req, res) => {
   try {
-    const project = await Portfolio.findById(req.params.id);
+    const project = await Portfolio.findById(
+      req.params.id
+    );
 
     if (!project) {
       return res.status(404).json({
@@ -150,7 +190,19 @@ export const updatePortfolio = async (req, res) => {
       });
     }
 
-    const { title, description, service, client, link, order } = req.body;
+    const {
+      title,
+      description,
+      service,
+      client,
+      link,
+      order,
+      videoUrl,
+    } = req.body;
+
+    // ==========================================
+    // UPDATE SERVICE
+    // ==========================================
 
     if (service !== undefined) {
       if (!mongoose.Types.ObjectId.isValid(service)) {
@@ -160,17 +212,24 @@ export const updatePortfolio = async (req, res) => {
         });
       }
 
-      const serviceExists = await Service.findById(service);
+      const serviceExists = await Service.findById(
+        service
+      );
 
       if (!serviceExists) {
         return res.status(404).json({
           success: false,
-          message: "Selected service does not exist",
+          message:
+            "Selected service does not exist",
         });
       }
 
       project.service = service;
     }
+
+    // ==========================================
+    // UPDATE BASIC FIELDS
+    // ==========================================
 
     if (title !== undefined) {
       project.title = title;
@@ -192,25 +251,47 @@ export const updatePortfolio = async (req, res) => {
       project.order = order;
     }
 
-    // New images → save Cloudinary URLs
-    if (req.files?.images && req.files.images.length > 0) {
-      project.images = req.files.images.map((file) => file.path);
+    // ==========================================
+    // UPDATE IMAGES
+    // ==========================================
+
+    if (
+      req.files?.images &&
+      req.files.images.length > 0
+    ) {
+      project.images = req.files.images.map(
+        (file) => file.path
+      );
     }
 
-    // New video → save Cloudinary URL
-    if (req.files?.video?.[0]) {
+    // ==========================================
+    // UPDATE VIDEO
+    //
+    // Priority:
+    // 1. Direct Cloudinary URL
+    // 2. Backend uploaded video
+    // ==========================================
+
+    if (videoUrl) {
+      project.video = videoUrl;
+    } else if (req.files?.video?.[0]) {
       project.video = req.files.video[0].path;
     }
 
     await project.save();
 
-    const populated = await project.populate("service", "title slug");
+    const populated = await project.populate(
+      "service",
+      "title slug"
+    );
 
     res.json({
       success: true,
       data: populated,
     });
   } catch (error) {
+    console.error("UPDATE PORTFOLIO ERROR:", error);
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -218,11 +299,15 @@ export const updatePortfolio = async (req, res) => {
   }
 };
 
-// @route DELETE /api/portfolio/:id
-// @access Private (admin)
+// ==========================================
+// DELETE PORTFOLIO PROJECT
+// ==========================================
+
 export const deletePortfolio = async (req, res) => {
   try {
-    const project = await Portfolio.findById(req.params.id);
+    const project = await Portfolio.findById(
+      req.params.id
+    );
 
     if (!project) {
       return res.status(404).json({
