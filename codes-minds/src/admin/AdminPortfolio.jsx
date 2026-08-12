@@ -8,6 +8,7 @@ import {
 } from "../api/portfolio";
 import { getServices } from "../api/services";
 import { resolveImage } from "../api/config";
+import { uploadToCloudinary } from "../api/uploads";
 import "./admin.css";
 
 const emptyForm = {
@@ -122,15 +123,21 @@ function AdminPortfolio() {
     fd.append("link", form.link.trim());
     fd.append("order", String(Number(form.order) || 0));
 
-    imageFiles.forEach((file) => {
-      fd.append("images", file);
-    });
-
-    if (videoFile) {
-      fd.append("video", videoFile);
-    }
-
     try {
+      // Files go straight from the browser to Cloudinary. This avoids Vercel's
+      // serverless request-size limit, which otherwise prevents larger videos.
+      if (imageFiles.length > 0) {
+        const imageUrls = await Promise.all(
+          imageFiles.map((file) => uploadToCloudinary(file, "image")),
+        );
+        fd.append("imageUrls", JSON.stringify(imageUrls));
+      }
+
+      if (videoFile) {
+        const videoUrl = await uploadToCloudinary(videoFile, "video");
+        fd.append("videoUrl", videoUrl);
+      }
+
       if (editing) {
         await updatePortfolio(editing._id, fd);
       } else {

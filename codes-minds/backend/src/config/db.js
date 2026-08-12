@@ -1,5 +1,9 @@
-import "dotenv/config";
 import mongoose from "mongoose";
+import dns from "dns";
+
+// Vercel's serverless runtime can fail to resolve MongoDB Atlas SRV records
+// with its default resolver. Use reliable public resolvers for this process.
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
