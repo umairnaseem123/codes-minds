@@ -12,6 +12,7 @@ import {
 import ProcessSteps from "../components/ProcessSteps";
 import CTABanner from "../components/CTABanner";
 import Team from "../components/Team";
+import AnimatedNumber from "../components/AnimatedNumber";
 import "./About.css";
 
 const stats = [
@@ -153,9 +154,10 @@ function About() {
           <div className="about-story__stats">
             {stats.map((stat, i) => (
               <div key={i} className="about-stat-card">
-                <span className="about-stat-card__value gradient-text">
-                  {stat.value}
-                </span>
+                <AnimatedNumber
+                  value={stat.value}
+                  className="about-stat-card__value gradient-text"
+                />
                 <h4>{stat.label}</h4>
                 <p>{stat.desc}</p>
               </div>
