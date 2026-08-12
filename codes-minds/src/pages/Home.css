@@ -186,6 +186,36 @@
   border-radius: var(--radius-md);
   padding: 28px 24px;
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    transform 280ms ease,
+    border-color 280ms ease,
+    box-shadow 280ms ease,
+    background 280ms ease;
+}
+
+.testimonial-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(56, 189, 248, 0.18), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.2), transparent 45%);
+  transition: opacity 280ms ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-9px);
+  border-color: rgba(139, 92, 246, 0.75);
+  background: color-mix(in srgb, var(--color-bg) 90%, #26174c);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 26px rgba(139, 92, 246, 0.2);
+}
+
+.testimonial-card:hover::before {
+  opacity: 1;
 }
 
 .testimonial-card__quote {
@@ -194,6 +224,14 @@
   color: var(--color-violet);
   line-height: 1;
   opacity: 0.6;
+  display: inline-block;
+  transition: transform 280ms ease, opacity 280ms ease, color 280ms ease;
+}
+
+.testimonial-card:hover .testimonial-card__quote {
+  transform: translate(5px, -4px) scale(1.15);
+  opacity: 1;
+  color: var(--color-sky);
 }
 
 .testimonial-card p {
@@ -209,6 +247,11 @@
   padding-top: 16px;
   border-top: 1px solid var(--color-border);
   position: relative;
+  transition: border-color 280ms ease;
+}
+
+.testimonial-card:hover .testimonial-card__footer {
+  border-color: rgba(139, 92, 246, 0.45);
 }
 
 .testimonial-card__avatar {
@@ -222,6 +265,12 @@
   color: #fff;
   font-weight: 700;
   flex-shrink: 0;
+  transition: transform 280ms ease, box-shadow 280ms ease;
+}
+
+.testimonial-card:hover .testimonial-card__avatar {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.45);
 }
 
 .testimonial-card__footer h5 {
@@ -237,6 +286,21 @@
   display: flex;
   gap: 2px;
   margin-left: auto;
+  transition: transform 280ms ease, filter 280ms ease;
+}
+
+.testimonial-card:hover .testimonial-card__stars {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.6));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonial-card,
+  .testimonial-card__quote,
+  .testimonial-card__avatar,
+  .testimonial-card__stars {
+    transition: none;
+  }
 }
 
 @media (max-width: 1024px) {
