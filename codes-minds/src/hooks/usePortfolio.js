@@ -11,7 +11,17 @@ export function usePortfolio(serviceId) {
 
     getPortfolio(serviceId)
       .then((res) => {
-        if (!cancelled) setProjects(res.data || []);
+        if (cancelled) return;
+
+        // API returns { success, count, data }. Keep compatibility with
+        // direct-array responses as well.
+        const projects = Array.isArray(res?.data?.data)
+          ? res.data.data
+          : Array.isArray(res?.data)
+          ? res.data
+          : [];
+
+        setProjects(projects);
       })
       .catch(() => {
         if (!cancelled) setProjects([]);
