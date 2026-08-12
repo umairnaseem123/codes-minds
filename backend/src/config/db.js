@@ -1,6 +1,8 @@
+import "dotenv/config";
 import mongoose from "mongoose";
+import dns from "dns";
 
-let connectionPromise = null;
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const connectDB = async () => {
   if (mongoose.connection.readyState === 1) {
@@ -11,18 +13,11 @@ const connectDB = async () => {
     throw new Error("MONGO_URI environment variable is not configured");
   }
 
-  if (!connectionPromise) {
-    connectionPromise = mongoose.connect(process.env.MONGO_URI, {
-      serverSelectionTimeoutMS: 10000,
-    });
-  }
-
   try {
-    const conn = await connectionPromise;
+    const conn = await mongoose.connect(process.env.MONGO_URI);
     console.log(`MongoDB connected: ${conn.connection.host}`);
     return conn;
   } catch (error) {
-    connectionPromise = null;
     console.error(`MongoDB connection error: ${error.message}`);
     throw error;
   }
