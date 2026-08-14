@@ -23,12 +23,26 @@ function Header() {
     setServicesOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
   return (
     <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
       <div className="container header__inner">
         <Link to="/" className="header__logo">
           <img src={logo} alt="CØDES-MINDS" />
         </Link>
+
+        <div
+          className={`header__overlay ${
+            mobileOpen ? "header__overlay--visible" : ""
+          }`}
+          onClick={() => setMobileOpen(false)}
+        />
 
         <nav className={`header__nav ${mobileOpen ? "header__nav--open" : ""}`}>
           <NavLink to="/" className="header__link" end>

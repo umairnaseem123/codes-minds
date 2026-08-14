@@ -157,6 +157,10 @@
   color: var(--color-text);
 }
 
+.header__overlay {
+  display: none;
+}
+
 /* Shared button styles used across the site */
 .btn {
   display: inline-flex;
@@ -207,6 +211,7 @@
     gap: 24px;
     transition: right 0.3s ease;
     border-left: 1px solid var(--color-border);
+    z-index: 100;
   }
 
   .header__nav--open {
@@ -227,5 +232,21 @@
 
   .header__toggle {
     display: block;
+  }
+
+  .header__overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .header__overlay--visible {
+    opacity: 1;
+    pointer-events: auto;
   }
 }
