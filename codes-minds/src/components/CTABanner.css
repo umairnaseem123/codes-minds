@@ -7,6 +7,28 @@
   padding: 36px 44px;
   position: relative;
   overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  background-size: 200% 200%;
+  animation: gradientShift 6s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ctabanner:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(139, 92, 246, 0.3);
 }
 
 .ctabanner::before {
@@ -32,6 +54,11 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  transition: transform 0.4s ease;
+}
+
+.ctabanner:hover .ctabanner__icon {
+  transform: rotate(15deg) scale(1.15);
 }
 
 .ctabanner__text {
@@ -57,10 +84,13 @@
   flex-shrink: 0;
   position: relative;
   z-index: 1;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .ctabanner .btn--white:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.03);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
 
