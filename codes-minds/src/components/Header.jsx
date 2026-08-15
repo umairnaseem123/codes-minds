@@ -10,12 +10,21 @@ function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 968 : false
+  );
   const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 968);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   useEffect(() => {
@@ -29,6 +38,24 @@ function Header() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  const handleDropdownEnter = () => {
+    if (!isMobile) setServicesOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    if (!isMobile) setServicesOpen(false);
+  };
+
+  const handleServicesLinkClick = (e) => {
+    if (isMobile) {
+      // On mobile, first tap opens the dropdown instead of navigating away
+      if (!servicesOpen) {
+        e.preventDefault();
+        setServicesOpen(true);
+      }
+    }
+  };
 
   return (
     <>
@@ -49,15 +76,18 @@ function Header() {
             </NavLink>
 
             <div
-              className="header__dropdown"
-              onMouseEnter={() => setServicesOpen(true)}
-              onMouseLeave={() => setServicesOpen(false)}
+              className={`header__dropdown ${
+                servicesOpen ? "header__dropdown--open" : ""
+              }`}
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
             >
               <NavLink
                 to="/services"
                 className="header__link header__link--dropdown"
+                onClick={handleServicesLinkClick}
               >
-                Services{" "}
+                Services
                 <ChevronDown
                   size={16}
                   className={servicesOpen ? "rotate" : ""}
@@ -83,6 +113,13 @@ function Header() {
             <NavLink to="/contact" className="header__link">
               Contact
             </NavLink>
+
+            <Link
+              to="/contact"
+              className="btn btn--primary header__cta header__cta--mobile"
+            >
+              Get In Touch <ChevronDown size={16} className="header__cta-arrow" />
+            </Link>
           </nav>
 
           <div className="header__actions">

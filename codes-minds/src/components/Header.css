@@ -152,9 +152,19 @@
   transform: rotate(-90deg);
 }
 
+/* Extra CTA rendered inside the mobile nav panel only */
+.header__cta--mobile {
+  display: none;
+}
+
 .header__toggle {
   display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
   color: var(--color-text);
+  z-index: 101;
+  position: relative;
 }
 
 .header__overlay {
@@ -197,37 +207,71 @@
 }
 
 @media (max-width: 968px) {
+  .header__inner {
+    position: relative;
+  }
+
   .header__nav {
     position: fixed;
     top: 0;
     right: -100%;
-    height: 100vh;
-    width: min(320px, 80vw);
-    background: var(--color-surface);
+    height: 100dvh;
+    width: min(320px, 82vw);
+    background: var(--color-surface, #0d0d14);
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 100px 32px 32px;
-    gap: 24px;
+    padding: 100px 28px 40px;
+    gap: 20px;
     transition: right 0.3s ease;
     border-left: 1px solid var(--color-border);
     z-index: 100;
+    overflow-y: auto;
   }
 
   .header__nav--open {
     right: 0;
   }
 
+  .header__link {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1.05rem;
+  }
+
+  .header__dropdown {
+    width: 100%;
+  }
+
+  .header__link--dropdown {
+    justify-content: space-between;
+    width: 100%;
+  }
+
   .header__dropdown-menu {
     position: static;
     transform: none;
     box-shadow: none;
-    margin-top: 8px;
+    margin-top: 4px;
+    margin-bottom: 4px;
     width: 100%;
+    background: var(--color-surface-alt, rgba(255, 255, 255, 0.04));
+    display: none;
+  }
+
+  .header__dropdown--open .header__dropdown-menu {
+    display: grid;
   }
 
   .header__cta {
     display: none;
+  }
+
+  .header__cta--mobile {
+    display: flex;
+    margin-top: 12px;
+    width: 100%;
+    justify-content: center;
   }
 
   .header__toggle {
@@ -238,7 +282,7 @@
     display: block;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.7);
     z-index: 99;
     opacity: 0;
     pointer-events: none;
@@ -248,5 +292,12 @@
   .header__overlay--visible {
     opacity: 1;
     pointer-events: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .header__nav {
+    width: 88vw;
+    padding: 90px 22px 32px;
   }
 }
