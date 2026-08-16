@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Star } from "lucide-react";
 import StatBar from "../components/StatBar";
@@ -7,7 +6,7 @@ import CTABanner from "../components/CTABanner";
 import { useServices } from "../hooks/useServices";
 import { usePortfolio } from "../hooks/usePortfolio";
 import { resolveImage } from "../api/config";
-import homeHeroImg from "../assets/home-hero.png";
+import HeroVisual from "../components/HeroVisual";
 import "./Home.css";
 
 const homeStats = [
@@ -42,26 +41,6 @@ const testimonials = [
 function Home() {
   const { services } = useServices();
   const { projects } = usePortfolio();
-  const photoRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    const el = photoRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -10;
-    const rotateY = ((x - centerX) / centerX) * 10;
-    el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.03)`;
-  };
-
-  const handleMouseLeave = () => {
-    const el = photoRef.current;
-    if (!el) return;
-    el.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)";
-  };
 
   return (
     <>
@@ -106,17 +85,7 @@ function Home() {
           </div>
 
           <div className="home-hero__visual">
-            <div
-              className="home-hero__photo"
-              ref={photoRef}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-            >
-              <img
-                src={homeHeroImg}
-                alt="Umair & Anoosha - Co-Founders of Codes-Minds"
-              />
-            </div>
+            <HeroVisual />
           </div>
         </div>
       </section>
