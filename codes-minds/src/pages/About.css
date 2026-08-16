@@ -48,6 +48,10 @@
   color: var(--color-text-muted);
 }
 
+/* =========================
+   OUR STORY
+========================= */
+
 .about-story {
   background: var(--color-surface);
 }
@@ -88,7 +92,7 @@
 
 .about-stat-card:hover {
   transform: translateY(-6px);
-  border-color: var(--color-violet, #8b5cf6);
+  border-color: var(--color-violet);
   box-shadow: 0 12px 30px rgba(139, 92, 246, 0.18);
 }
 
@@ -109,6 +113,215 @@
   font-size: 0.8rem;
   color: var(--color-text-muted);
 }
+
+/* =========================
+   MEET THE TEAM
+========================= */
+
+.about-team {
+  position: relative;
+  overflow: hidden;
+}
+
+.about-team__showcase {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+  margin-bottom: 80px;
+}
+
+/* IMAGE */
+
+.about-team__image-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 520px;
+}
+
+.about-team__image {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow:
+    0 25px 70px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(139, 92, 246, 0.18);
+  transition:
+    transform 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.about-team__image:hover {
+  transform: translateY(-8px);
+  box-shadow:
+    0 35px 80px rgba(0, 0, 0, 0.5),
+    0 0 55px rgba(139, 92, 246, 0.3);
+}
+
+.about-team__image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+/* GLOWS */
+
+.about-team__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.about-team__glow--one {
+  width: 230px;
+  height: 230px;
+  background: rgba(139, 92, 246, 0.7);
+  top: 20px;
+  left: 20px;
+}
+
+.about-team__glow--two {
+  width: 200px;
+  height: 200px;
+  background: rgba(56, 189, 248, 0.5);
+  bottom: 10px;
+  right: 20px;
+}
+
+/* FLOATING CARDS */
+
+.about-team__floating-card {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  background: rgba(20, 20, 30, 0.88);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  animation: teamFloat 4s ease-in-out infinite;
+}
+
+.about-team__floating-card--left {
+  left: -10px;
+  top: 18%;
+}
+
+.about-team__floating-card--right {
+  right: -10px;
+  bottom: 18%;
+  animation-delay: 1.5s;
+}
+
+.about-team__floating-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: rgba(139, 92, 246, 0.15);
+  font-size: 1.1rem;
+}
+
+.about-team__floating-card div {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-team__floating-card strong {
+  font-size: 0.78rem;
+  color: var(--color-text);
+}
+
+.about-team__floating-card span:not(.about-team__floating-icon) {
+  font-size: 0.68rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+@keyframes teamFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* TEAM CONTENT */
+
+.about-team__content {
+  max-width: 540px;
+}
+
+.about-team__content h3 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin: 12px 0 20px;
+  line-height: 1.2;
+}
+
+.about-team__content p {
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+  line-height: 1.8;
+}
+
+/* MINI STATS */
+
+.about-team__mini-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 32px;
+}
+
+.about-team__mini-stats div {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.about-team__mini-stats div:hover {
+  transform: translateY(-5px);
+  border-color: var(--color-violet);
+}
+
+.about-team__mini-stats strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--color-violet);
+  margin-bottom: 4px;
+}
+
+.about-team__mini-stats span {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* =========================
+   OUR VALUES
+========================= */
 
 .about-values__grid {
   display: grid;
@@ -132,7 +345,7 @@
 
 .about-value-card:hover {
   transform: translateY(-6px);
-  border-color: var(--color-violet, #8b5cf6);
+  border-color: var(--color-violet);
   box-shadow: 0 12px 30px rgba(139, 92, 246, 0.18);
 }
 
@@ -162,6 +375,10 @@
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
+
+/* =========================
+   OUR EXPERTISE
+========================= */
 
 .about-skills {
   background: var(--color-surface);
@@ -215,25 +432,38 @@
   height: 100%;
   border-radius: 999px;
   width: 0%;
-  animation: fillBar 1.4s ease forwards;
-  animation-delay: 0.2s;
 }
 
-@keyframes fillBar {
-  from {
-    width: 0%;
-  }
-  to {
-    width: var(--target-width, 100%);
-  }
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
 @media (max-width: 968px) {
   .about-hero__grid,
   .about-story__grid,
-  .about-skills__grid {
+  .about-skills__grid,
+  .about-team__showcase {
     grid-template-columns: 1fr;
   }
+
+  .about-team__showcase {
+    gap: 45px;
+  }
+
+  .about-team__content {
+    max-width: 650px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .about-team__image-wrapper {
+    min-height: auto;
+  }
+
+  .about-team__image {
+    max-width: 450px;
+  }
+
   .about-values__grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -243,5 +473,34 @@
   .about-story__stats,
   .about-values__grid {
     grid-template-columns: 1fr;
+  }
+
+  .about-team__showcase {
+    margin-bottom: 60px;
+  }
+
+  .about-team__floating-card {
+    display: none;
+  }
+
+  .about-team__image {
+    max-width: 100%;
+    border-radius: 18px;
+  }
+
+  .about-team__mini-stats {
+    gap: 8px;
+  }
+
+  .about-team__mini-stats div {
+    padding: 12px 8px;
+  }
+
+  .about-team__mini-stats strong {
+    font-size: 1.1rem;
+  }
+
+  .about-team__mini-stats span {
+    font-size: 0.68rem;
   }
 }

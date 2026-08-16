@@ -1,30 +1,45 @@
 import { useState, useEffect } from "react";
 import { NavLink, Link, useLocation } from "react-router-dom";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, ArrowRight } from "lucide-react";
 import { useServices } from "../hooks/useServices";
 import logo from "../assets/logo.png";
 import "./Header.css";
 
 function Header() {
   const { services } = useServices();
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+
   const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 968 : false
+    typeof window !== "undefined" ? window.innerWidth <= 968 : false,
   );
+
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
     window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth <= 968);
+    const onResize = () => {
+      setIsMobile(window.innerWidth <= 968);
+    };
+
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -34,26 +49,28 @@ function Header() {
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
+
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
   const handleDropdownEnter = () => {
-    if (!isMobile) setServicesOpen(true);
+    if (!isMobile) {
+      setServicesOpen(true);
+    }
   };
 
   const handleDropdownLeave = () => {
-    if (!isMobile) setServicesOpen(false);
+    if (!isMobile) {
+      setServicesOpen(false);
+    }
   };
 
   const handleServicesLinkClick = (e) => {
-    if (isMobile) {
-      // On mobile, first tap opens the dropdown instead of navigating away
-      if (!servicesOpen) {
-        e.preventDefault();
-        setServicesOpen(true);
-      }
+    if (isMobile && !servicesOpen) {
+      e.preventDefault();
+      setServicesOpen(true);
     }
   };
 
@@ -61,20 +78,24 @@ function Header() {
     <>
       <header className={`header ${scrolled ? "header--scrolled" : ""}`}>
         <div className="container header__inner">
+          {/* LOGO */}
           <Link to="/" className="header__logo">
             <img src={logo} alt="CØDES-MINDS" />
           </Link>
 
+          {/* NAVIGATION */}
           <nav
             className={`header__nav ${mobileOpen ? "header__nav--open" : ""}`}
           >
             <NavLink to="/" className="header__link" end>
               Home
             </NavLink>
+
             <NavLink to="/about" className="header__link">
               About Us
             </NavLink>
 
+            {/* SERVICES DROPDOWN */}
             <div
               className={`header__dropdown ${
                 servicesOpen ? "header__dropdown--open" : ""
@@ -96,16 +117,21 @@ function Header() {
 
               {servicesOpen && (
                 <div className="header__dropdown-menu">
-                  {services.map((service) => (
-                    <Link
-                      key={service.slug}
-                      to={`/services/${service.slug}`}
-                      className="header__dropdown-item"
-                    >
-                      <service.icon size={16} />
-                      {service.title}
-                    </Link>
-                  ))}
+                  {services.map((service) => {
+                    const Icon = service.icon;
+
+                    return (
+                      <Link
+                        key={service.slug}
+                        to={`/services/${service.slug}`}
+                        className="header__dropdown-item"
+                      >
+                        <Icon size={16} />
+
+                        <span>{service.title}</span>
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -114,18 +140,19 @@ function Header() {
               Contact
             </NavLink>
 
-            <Link
-              to="/contact"
-              className="btn btn--primary header__cta header__cta--mobile"
-            >
-              Get In Touch <ChevronDown size={16} className="header__cta-arrow" />
+            {/* MOBILE GET IN TOUCH */}
+            <Link to="/contact" className="header__mobile-cta">
+              Get In Touch
+              <ArrowRight size={17} />
             </Link>
           </nav>
 
+          {/* DESKTOP ACTIONS */}
           <div className="header__actions">
+            {/* ONLY ONE DESKTOP GET IN TOUCH */}
             <Link to="/contact" className="btn btn--primary header__cta">
-              Get In Touch{" "}
-              <ChevronDown size={16} className="header__cta-arrow" />
+              Get In Touch
+              <ArrowRight size={17} />
             </Link>
 
             <button
@@ -139,6 +166,7 @@ function Header() {
         </div>
       </header>
 
+      {/* MOBILE OVERLAY */}
       <div
         className={`header__overlay ${
           mobileOpen ? "header__overlay--visible" : ""

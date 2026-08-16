@@ -42,7 +42,7 @@ const values = [
   {
     icon: Users,
     title: "Client First",
-    desc: "We put our clients\u2019 success at the heart of everything we do.",
+    desc: "We put our clients' success at the heart of everything we do.",
   },
   {
     icon: Gem,
@@ -88,40 +88,54 @@ const process = [
     title: "Plan & Strategy",
     desc: "We create the best strategy and plan to achieve results.",
   },
-  { title: "Design", desc: "We design creative and engaging solutions." },
-  { title: "Develop", desc: "We build fast, secure and scalable products." },
+  {
+    title: "Design",
+    desc: "We design creative and engaging solutions.",
+  },
+  {
+    title: "Develop",
+    desc: "We build fast, secure and scalable products.",
+  },
   {
     title: "Deliver",
     desc: "We test, launch and deliver a product that performs.",
   },
-  { title: "Support", desc: "We provide ongoing support and help you grow." },
+  {
+    title: "Support",
+    desc: "We provide ongoing support and help you grow.",
+  },
 ];
 
 function About() {
   return (
     <>
+      {/* HERO SECTION */}
       <section className="section about-hero">
         <div className="container about-hero__grid">
           <div>
             <span className="eyebrow">ABOUT US</span>
+
             <h1>
               We Are <span className="gradient-text">CØDES-MINDS</span>
               <br />
               Your Partner In Digital Success
             </h1>
+
             <p>
               CØDES-MINDS is a creative digital agency passionate about turning
               ideas into powerful digital experiences. We combine creativity,
               technology and strategy to help businesses grow, stand out and
               succeed in the digital world.
             </p>
+
             <Link to="/contact" className="btn btn--primary">
-              Let&apos;s Work Together <ArrowRight size={16} />
+              Let's Work Together <ArrowRight size={16} />
             </Link>
           </div>
 
           <div className="about-hero__badge">
             <Rocket size={28} />
+
             <div>
               <strong>5+</strong>
               <span>Years Of Experience</span>
@@ -130,20 +144,24 @@ function About() {
         </div>
       </section>
 
+      {/* OUR STORY */}
       <section className="section about-story">
         <div className="container about-story__grid">
           <div className="about-story__text">
             <span className="eyebrow">OUR STORY</span>
+
             <h2>
               From Passionate Developers To Your{" "}
               <span className="gradient-text">Digital Growth</span> Partners
             </h2>
+
             <p>
               CØDES-MINDS was founded with a simple goal — to deliver
               high-quality digital solutions that make a real impact. We believe
               in building long-term relationships with our clients by delivering
               results that matter.
             </p>
+
             <p>
               Our team of creative designers, developers and digital experts
               work together to create modern, functional and user-friendly
@@ -158,6 +176,7 @@ function About() {
                   value={stat.value}
                   className="about-stat-card__value gradient-text"
                 />
+
                 <h4>{stat.label}</h4>
                 <p>{stat.desc}</p>
               </div>
@@ -166,31 +185,113 @@ function About() {
         </div>
       </section>
 
+      {/* MEET THE TEAM */}
       <section className="section about-team">
         <div className="container">
           <div className="section-header">
             <span className="eyebrow">MEET THE TEAM</span>
+
             <h2>
               The People Behind{" "}
               <span className="gradient-text">CØDES-MINDS</span>
             </h2>
+
             <p>
-              Two developers, one shared goal — building digital experiences
-              that make a real difference.
+              Two developers, one shared vision — combining creativity,
+              technology and innovation to build digital experiences that make a
+              real difference.
             </p>
           </div>
+
+          <div className="about-team__showcase">
+            {/* TEAM IMAGE */}
+            <div className="about-team__image-wrapper">
+              <div className="about-team__glow about-team__glow--one" />
+              <div className="about-team__glow about-team__glow--two" />
+
+              <div className="about-team__image">
+                <img
+                  src="/team/team-duo.png"
+                  alt="The team behind Codes-Minds"
+                />
+              </div>
+
+              <div className="about-team__floating-card about-team__floating-card--left">
+                <span className="about-team__floating-icon">💡</span>
+
+                <div>
+                  <strong>Creative Minds</strong>
+                  <span>Ideas Into Reality</span>
+                </div>
+              </div>
+
+              <div className="about-team__floating-card about-team__floating-card--right">
+                <span className="about-team__floating-icon">🚀</span>
+
+                <div>
+                  <strong>Building Forward</strong>
+                  <span>Digital Innovation</span>
+                </div>
+              </div>
+            </div>
+
+            {/* TEAM CONTENT */}
+            <div className="about-team__content">
+              <span className="eyebrow">THE MINDS BEHIND THE CODE</span>
+
+              <h3>
+                Creativity Meets{" "}
+                <span className="gradient-text">Technology</span>
+              </h3>
+
+              <p>
+                CØDES-MINDS is built by passionate developers who believe that
+                great digital products begin with great ideas. We combine
+                creativity, strategy and technology to turn concepts into
+                meaningful digital experiences.
+              </p>
+
+              <p>
+                Every project is an opportunity to create something unique,
+                solve real problems and help businesses build a stronger digital
+                presence.
+              </p>
+
+              <div className="about-team__mini-stats">
+                <div>
+                  <strong>150+</strong>
+                  <span>Projects</span>
+                </div>
+
+                <div>
+                  <strong>80+</strong>
+                  <span>Clients</span>
+                </div>
+
+                <div>
+                  <strong>99%</strong>
+                  <span>Satisfaction</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* EXISTING TEAM MEMBERS */}
           <Team />
         </div>
       </section>
 
+      {/* OUR VALUES */}
       <section className="section about-values">
         <div className="container">
           <div className="section-header">
             <span className="eyebrow">OUR VALUES</span>
+
             <h2>
               The Principles That Drive{" "}
               <span className="gradient-text">Everything</span> We Do
             </h2>
+
             <p>
               We follow strong values that guide our work, relationships and the
               way we grow together.
@@ -198,33 +299,42 @@ function About() {
           </div>
 
           <div className="about-values__grid">
-            {values.map((v, i) => (
-              <div key={i} className="about-value-card">
-                <div className="about-value-card__icon">
-                  <v.icon size={22} />
+            {values.map((value, i) => {
+              const Icon = value.icon;
+
+              return (
+                <div key={i} className="about-value-card">
+                  <div className="about-value-card__icon">
+                    <Icon size={22} />
+                  </div>
+
+                  <div>
+                    <h4>{value.title}</h4>
+                    <p>{value.desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <h4>{v.title}</h4>
-                  <p>{v.desc}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
+      {/* OUR EXPERTISE */}
       <section className="section about-skills">
         <div className="container about-skills__grid">
           <div>
             <span className="eyebrow">OUR EXPERTISE</span>
+
             <h2>
               Skills We Master For Your{" "}
               <span className="gradient-text">Success</span>
             </h2>
+
             <p>
               We combine creativity and technology to deliver solutions that
               drive real results.
             </p>
+
             <Link to="/services" className="btn btn--outline">
               Explore Our Services <ArrowRight size={16} />
             </Link>
@@ -237,6 +347,7 @@ function About() {
                   <span>{skill.label}</span>
                   <span>{skill.value}%</span>
                 </div>
+
                 <div className="skill-bar__track">
                   <div
                     className="skill-bar__fill"
@@ -252,6 +363,7 @@ function About() {
         </div>
       </section>
 
+      {/* PROCESS */}
       <section className="section">
         <ProcessSteps
           steps={process}
@@ -261,6 +373,7 @@ function About() {
         />
       </section>
 
+      {/* CTA */}
       <section className="section about-cta">
         <CTABanner
           title="Ready To Start Your Next Project?"
